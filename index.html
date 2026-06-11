@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bhai Chat Web</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #f0f2f5; display: flex; flex-direction: column; height: 100vh; }
+        header { background-color: #075e54; color: white; padding: 15px; text-align: center; font-size: 20px; font-weight: bold; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+        #chat-box { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
+        .message-container { display: flex; flex-direction: column; max-width: 75%; padding: 8px 12px; border-radius: 8px; box-shadow: 0 1px 2px rgba(0,0,0,0.1); position: relative; }
+        .msg-left { background-color: white; align-self: flex-start; border-top-left-radius: 0; }
+        .msg-right { background-color: #d9fdd3; align-self: flex-end; border-top-right-radius: 0; }
+        .sender-name { font-size: 12px; font-weight: bold; color: #128c7e; margin-bottom: 2px; }
+        .msg-text { font-size: 15px; color: #333; word-break: break-word; }
+        .msg-time { font-size: 10px; color: #777; align-self: flex-end; margin-top: 4px; }
+        #input-area { background: #f0f0f0; padding: 10px; display: flex; gap: 10px; align-items: center; border-top: 1px solid #ddd; }
+        #username { width: 80px; padding: 10px; border: 1px solid #ccc; border-radius: 20px; outline: none; text-align: center; font-weight: bold; }
+        #message-input { flex: 1; padding: 10px 15px; border: 1px solid #ccc; border-radius: 20px; outline: none; }
+        #send-btn { background-color: #00a884; color: white; border: none; padding: 10px 20px; border-radius: 20px; cursor: pointer; font-weight: bold; }
+        #send-btn:hover { background-color: #008f72; }
+    </style>
+</head>
+<body>
+
+    <header>Bhai Chat Web</header>
+
+    <div id="chat-box"></div>
+
+    <div id="input-area">
+        <input type="text" id="username" placeholder="नाम" value="Aman">
+        <input type="text" id="message-input" placeholder="मैसेज टाइप करें..." autocomplete="off">
+        <button id="send-btn" onclick="sendMessage()">भेजें</button>
+    </div>
+
+    <script>
+        const API_URL = "https://script.google.com/macros/s/AKfycbyLWkcCdZcYVjQuz-ml0rh_DmBBzj0vmIbLJ4j39tiq8lMceSHzikPX-AgXDi13Hlzt/exec";
+        let lastMsgCount = 0;
+
+        async function loadMessages() {
+            try {
+                let response = await fetch(API_URL);
+                let data = await response.json();
+                let chatBox = document.getElementById("chat-box");
+                let currentUser = document.getElementById("username").value;
+                
+                chatBox.innerHTML = "";
+                
+                data.forEach(msg => {
+                    let isMe = msg.sender.trim().toLowerCase() === currentUser.trim().toLowerCase();
+                    let msgClass = isMe ? "msg-right" : "msg-left";
+                    
+                    let msgHtml = `
+                        <div class="message-container ${msgClass}">
+                            <div class="sender-name">${isMe ? "आप" : msg.sender}</div>
+                            <div class="msg-text">${msg.message}</div>
+                            <div class="msg-time">${msg.timestamp}</div>
+                        </div>
+                    `;
+                    chatBox.innerHTML += msgHtml;
+                });
+
+                if (data.length > lastMsgCount) {
+                    chatBox.scrollTop = chatBox.scrollHeight;
+                    if (lastMsgCount !== 0 && Notification.permission === "granted") {
+                        let lastMsg = data[data.length - 1];
+                        if(lastMsg.sender.trim().toLowerCase() !== currentUser.trim().toLowerCase()) {
+                            new Notification(`नया मैसेज: ${lastMsg.sender}`, { body: lastMsg.message });
+                        }
+                    }
+                    lastMsgCount = data.length;
+                }
+            } catch (error) { console.error(error); }
+        }
+
+        async function sendMessage() {
+            let sender = document.getElementById("username").value;
+            let message = document.getElementById("message-input").value;
+            let sendBtn = document.getElementById("send-btn");
+            if (!sender || !message) return;
+            sendBtn.disabled = true;
+            document.getElementById("message-input").value = "";
+            try {
+                await fetch(`${API_URL}?sender=${encodeURIComponent(sender)}&message=${encodeURIComponent(message)}`, { method: 'POST' });
+                loadMessages();
+            } catch (error) { console.error(error); } finally { sendBtn.disabled = false; }
+        }
+
+        document.getElementById("message-input").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") { sendMessage(); }
+        });
+
+        window.onload = () => {
+            if (Notification.permission !== "granted") { Notification.requestPermission(); }
+            loadMessages();
+            setInterval(loadMessages, 3000);
+        };
+    </script>
+</body>
+</html>
