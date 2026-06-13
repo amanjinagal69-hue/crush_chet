@@ -3,38 +3,106 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bhai Chat Web</title>
+    <title>TopFollow Coins & SMM Store</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
-        body { background-color: #f0f2f5; display: flex; flex-direction: column; height: 100vh; }
-        header { background-color: #075e54; color: white; padding: 15px; text-align: center; font-size: 20px; font-weight: bold; }
-        #input-area { background: #e5ddd5; padding: 10px; display: flex; gap: 8px; align-items: center; border-bottom: 1px solid #ccc; }
-        #username { width: 70px; padding: 10px; border: 1px solid #ccc; border-radius: 20px; outline: none; text-align: center; font-weight: bold; }
-        #message-input { flex: 1; padding: 10px 15px; border: 1px solid #ccc; border-radius: 20px; outline: none; }
-        #send-btn { background-color: #00a884; color: white; border: none; padding: 10px 18px; border-radius: 20px; cursor: pointer; font-weight: bold; }
-        #chat-box { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; background-color: #f0f2f5; }
-        .message-container { display: flex; flex-direction: column; max-width: 80%; padding: 8px 12px; border-radius: 8px; box-shadow: 0 1px 2px rgba(0,0,0,0.1); }
-        .msg-left { background-color: white; align-self: flex-start; }
-        .msg-right { background-color: #d9fdd3; align-self: flex-end; }
-        .sender-name { font-size: 11px; font-weight: bold; color: #128c7e; margin-bottom: 2px; }
-        .msg-text { font-size: 15px; color: #333; word-break: break-word; }
-        .msg-time { font-size: 9px; color: #777; align-self: flex-end; margin-top: 4px; }
+        body { background-color: #f4f6f9; color: #333; display: flex; flex-direction: column; min-height: 100vh; }
+        header { background-color: #1e293b; color: #38bdf8; padding: 20px 15px; text-align: center; font-size: 24px; font-weight: bold; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .container { max-width: 500px; width: 100%; margin: 0 auto; padding: 15px; flex: 1; }
+        
+        /* रेट लिस्ट स्टाइल */
+        .card { background: white; padding: 15px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); margin-bottom: 20px; }
+        .card-title { font-size: 18px; font-weight: bold; color: #0f172a; margin-bottom: 12px; border-bottom: 2px solid #38bdf8; padding-bottom: 5px; }
+        .price-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed #e2e8f0; font-size: 15px; }
+        .price-row:last-child { border: none; }
+        .price { font-weight: bold; color: #16a34a; }
+
+        /* ऑर्डर और पेमेंट */
+        .btn { display: block; width: 100%; background: #0284c7; color: white; border: none; padding: 12px; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; text-align: center; text-decoration: none; margin-top: 10px; }
+        .btn:hover { background: #0369a1; }
+        .qr-box { text-align: center; display: none; margin-top: 15px; padding: 10px; background: #f8fafc; border-radius: 8px; border: 1px solid #cbd5e1; }
+        .qr-box img { max-width: 180px; margin: 10px 0; }
+        
+        /* चैट बॉक्स स्टाइल */
+        #chat-section { display: flex; flex-direction: column; height: 350px; background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        #chat-box { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; background: #f8fafc; }
+        .message-container { display: flex; flex-direction: column; max-width: 80%; padding: 8px 12px; border-radius: 8px; }
+        .msg-left { background-color: #e2e8f0; align-self: flex-start; }
+        .msg-right { background-color: #bae6fd; align-self: flex-end; }
+        .sender-name { font-size: 11px; font-weight: bold; color: #0369a1; margin-bottom: 2px; }
+        .msg-text { font-size: 14px; word-break: break-word; }
+        
+        #input-area { background: #f1f5f9; padding: 10px; display: flex; gap: 8px; align-items: center; border-top: 1px solid #e2e8f0; }
+        #username { width: 70px; padding: 8px; border: 1px solid #cbd5e1; border-radius: 20px; outline: none; text-align: center; font-weight: bold; }
+        #message-input { flex: 1; padding: 8px 15px; border: 1px solid #cbd5e1; border-radius: 20px; outline: none; }
+        #send-btn { background-color: #0284c7; color: white; border: none; padding: 8px 15px; border-radius: 20px; cursor: pointer; font-weight: bold; }
     </style>
 </head>
 <body>
 
-    <header>Bhai Chat Web</header>
+    <header>⚡ TopFollow Coins & SMM Store ⚡</header>
 
-    <!-- इनपुट एरिया ऊपर कर दिया ताकि मोबाइल पर हमेशा दिखे -->
-    <div id="input-area">
-        <input type="text" id="username" placeholder="नाम" value="Aman">
-        <input type="text" id="message-input" placeholder="मैसेज लिखें..." autocomplete="off">
-        <button id="send-btn" onclick="sendMessage()">भेजें</button>
+    <div class="container">
+        
+        <!-- रेट लिस्ट चालू -->
+        <div class="card">
+            <div class="card-title">💰 TopFollow Coins Rate</div>
+            <div class="price-row"><span>100K Coins</span> <span class="price">₹50</span></div>
+            <div class="price-row"><span>500K Coins</span> <span class="price">₹200</span></div>
+            <div class="price-row"><span>1 Million Coins</span> <span class="price">₹350</span></div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">🚀 Instagram Followers (Non-Drop)</div>
+            <div class="price-row"><span>1,000 Followers</span> <span class="price">₹40</span></div>
+            <div class="price-row"><span>5,000 Followers</span> <span class="price">₹180</span></div>
+            <div class="price-row"><span>10,000 Followers</span> <span class="price">₹320</span></div>
+        </div>
+
+        <!-- पेमेंट गेटवे -->
+        <div class="card" style="text-align: center;">
+            <div class="card-title">💳 Instant Payment</div>
+            <p style="font-size: 14px; color: #64748b;">ऑर्डर के लिए नीचे बटन दबाकर पेमेंट करें और चैट में स्क्रीनशॉट भेजें।</p>
+            <button class="btn" onclick="showQR()">Pay with UPI / QR</button>
+            
+            <div id="qr-container" class="qr-box">
+                <p style="font-weight: bold; color: #0284c7;">GooglePay / PhonePe / Paytm</p>
+                <!-- यहाँ तुम्हारा UPI QR कोड ऑटोमैटिक बन जाएगा -->
+                <img id="upi-qr" src="" alt="UPI QR Code">
+                <p style="font-size: 12px; font-weight: bold; color: #ef4444;">UPI ID: amanjinagal69@ibl</p>
+            </div>
+        </div>
+
+        <!-- लाइव डीलिंग चैट बॉक्स -->
+        <div class="card-title">💬 Live Deal Chat Support</div>
+        <div id="chat-section">
+            <div id="chat-box"></div>
+            <div id="input-area">
+                <input type="text" id="username" placeholder="नाम" value="Aman">
+                <input type="text" id="message-input" placeholder="पेमेंट के बाद यहाँ मैसेज करें..." autocomplete="off">
+                <button id="send-btn" onclick="sendMessage()">भेजें</button>
+            </div>
+        </div>
+
     </div>
 
-    <div id="chat-box"></div>
-
     <script>
+        // पेमेंट QR जनरेट करने का फंक्शन
+        function showQR() {
+            let uID = "amanjinagal69@ibl"; // तुम्हारी UPI ID
+            let name = "Aman Store";
+            let qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(`upi://pay?pa=${uID}&pn=${name}&cu=INR`)}`;
+            document.getElementById("upi-qr").src = qrUrl;
+            
+            let qrBox = document.getElementById("qr-container");
+            if (qrBox.style.display === "block") {
+                qrBox.style.display = "none";
+            } else {
+                qrBox.style.display = "block";
+            }
+        }
+
+        // चैट बॉक्स का बैकएंड लॉजिक (गूगल शीट एपीआई)
         const API_URL = "https://script.google.com/macros/s/AKfycbyLWkcCdZcYVjQuz-ml0rh_DmBBzj0vmIbLJ4j39tiq8lMceSHzikPX-AgXDi13Hlzt/exec";
         let lastMsgCount = 0;
 
@@ -55,19 +123,12 @@
                         <div class="message-container ${msgClass}">
                             <div class="sender-name">${isMe ? "आप" : msg.sender}</div>
                             <div class="msg-text">${msg.message}</div>
-                            <div class="msg-time">${msg.timestamp}</div>
                         </div>
                     `;
                 });
 
                 if (data.length > lastMsgCount) {
                     chatBox.scrollTop = chatBox.scrollHeight;
-                    if (lastMsgCount !== 0 && Notification.permission === "granted") {
-                        let lastMsg = data[data.length - 1];
-                        if(lastMsg.sender.trim().toLowerCase() !== currentUser.trim().toLowerCase()) {
-                            new Notification(`नया मैसेज: ${lastMsg.sender}`, { body: lastMsg.message });
-                        }
-                    }
                     lastMsgCount = data.length;
                 }
             } catch (e) { console.error(e); }
@@ -91,7 +152,6 @@
         });
 
         window.onload = () => {
-            if (Notification.permission !== "granted") { Notification.requestPermission(); }
             loadMessages();
             setInterval(loadMessages, 3000);
         };
