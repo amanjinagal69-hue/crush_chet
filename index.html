@@ -3,158 +3,194 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TopFollow Coins & SMM Store</title>
+    <title>Aman AI - One Click Magic</title>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
-        body { background-color: #f4f6f9; color: #333; display: flex; flex-direction: column; min-height: 100vh; }
-        header { background-color: #1e293b; color: #38bdf8; padding: 20px 15px; text-align: center; font-size: 24px; font-weight: bold; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        .container { max-width: 500px; width: 100%; margin: 0 auto; padding: 15px; flex: 1; }
-        
-        /* रेट लिस्ट स्टाइल */
-        .card { background: white; padding: 15px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); margin-bottom: 20px; }
-        .card-title { font-size: 18px; font-weight: bold; color: #0f172a; margin-bottom: 12px; border-bottom: 2px solid #38bdf8; padding-bottom: 5px; }
-        .price-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed #e2e8f0; font-size: 15px; }
-        .price-row:last-child { border: none; }
-        .price { font-weight: bold; color: #16a34a; }
-
-        /* ऑर्डर और पेमेंट */
-        .btn { display: block; width: 100%; background: #0284c7; color: white; border: none; padding: 12px; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; text-align: center; text-decoration: none; margin-top: 10px; }
-        .btn:hover { background: #0369a1; }
-        .qr-box { text-align: center; display: none; margin-top: 15px; padding: 10px; background: #f8fafc; border-radius: 8px; border: 1px solid #cbd5e1; }
-        .qr-box img { max-width: 180px; margin: 10px 0; }
-        
-        /* चैट बॉक्स स्टाइल */
-        #chat-section { display: flex; flex-direction: column; height: 350px; background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
-        #chat-box { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; background: #f8fafc; }
-        .message-container { display: flex; flex-direction: column; max-width: 80%; padding: 8px 12px; border-radius: 8px; }
-        .msg-left { background-color: #e2e8f0; align-self: flex-start; }
-        .msg-right { background-color: #bae6fd; align-self: flex-end; }
-        .sender-name { font-size: 11px; font-weight: bold; color: #0369a1; margin-bottom: 2px; }
-        .msg-text { font-size: 14px; word-break: break-word; }
-        
-        #input-area { background: #f1f5f9; padding: 10px; display: flex; gap: 8px; align-items: center; border-top: 1px solid #e2e8f0; }
-        #username { width: 70px; padding: 8px; border: 1px solid #cbd5e1; border-radius: 20px; outline: none; text-align: center; font-weight: bold; }
-        #message-input { flex: 1; padding: 8px 15px; border: 1px solid #cbd5e1; border-radius: 20px; outline: none; }
-        #send-btn { background-color: #0284c7; color: white; border: none; padding: 8px 15px; border-radius: 20px; cursor: pointer; font-weight: bold; }
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #121212;
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+            margin: 0;
+        }
+        .container {
+            max-width: 500px;
+            margin: 40px auto;
+            background: #1e1e1e;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 25px rgba(0, 0, 0, 0.7);
+            border: 1px solid #00ffcc;
+        }
+        h2 { 
+            color: #00ffcc; 
+            font-size: 24px;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        p {
+            color: #aaa;
+            font-size: 14px;
+            margin-bottom: 25px;
+        }
+        .upload-box {
+            border: 2px dashed #00ffcc;
+            padding: 20px;
+            border-radius: 10px;
+            background: #252525;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+        input[type="file"] { 
+            display: none; 
+        }
+        .upload-label {
+            color: #00ffcc;
+            cursor: pointer;
+            font-weight: bold;
+            display: block;
+        }
+        button {
+            background: #00ffcc;
+            color: #121212;
+            border: none;
+            padding: 14px 25px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 25px;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 255, 204, 0.3);
+        }
+        button:hover { 
+            background: #00ccaa; 
+            transform: translateY(-2px);
+        }
+        #preview {
+            max-width: 100%;
+            margin-top: 25px;
+            border-radius: 10px;
+            display: none;
+            border: 2px solid #333;
+        }
+        .loading {
+            display: none;
+            color: #ffcc00;
+            margin-top: 20px;
+            font-weight: bold;
+            font-size: 15px;
+        }
+        .btn-download {
+            background: #ff0055;
+            color: white;
+            margin-top: 15px;
+            display: none;
+            box-shadow: 0 4px 10px rgba(255, 0, 85, 0.3);
+        }
+        .btn-download:hover {
+            background: #d00045;
+        }
     </style>
 </head>
 <body>
 
-    <header>⚡ TopFollow Coins & SMM Store ⚡</header>
-
-    <div class="container">
-        
-        <!-- रेट लिस्ट चालू -->
-        <div class="card">
-            <div class="card-title">💰 TopFollow Coins Rate</div>
-            <div class="price-row"><span>100K Coins</span> <span class="price">₹50</span></div>
-            <div class="price-row"><span>500K Coins</span> <span class="price">₹200</span></div>
-            <div class="price-row"><span>1 Million Coins</span> <span class="price">₹350</span></div>
-        </div>
-
-        <div class="card">
-            <div class="card-title">🚀 Instagram Followers (Non-Drop)</div>
-            <div class="price-row"><span>1,000 Followers</span> <span class="price">₹40</span></div>
-            <div class="price-row"><span>5,000 Followers</span> <span class="price">₹180</span></div>
-            <div class="price-row"><span>10,000 Followers</span> <span class="price">₹320</span></div>
-        </div>
-
-        <!-- पेमेंट गेटवे -->
-        <div class="card" style="text-align: center;">
-            <div class="card-title">💳 Instant Payment</div>
-            <p style="font-size: 14px; color: #64748b;">ऑर्डर के लिए नीचे बटन दबाकर पेमेंट करें और चैट में स्क्रीनशॉट भेजें।</p>
-            <button class="btn" onclick="showQR()">Pay with UPI / QR</button>
-            
-            <div id="qr-container" class="qr-box">
-                <p style="font-weight: bold; color: #0284c7;">GooglePay / PhonePe / Paytm</p>
-                <!-- यहाँ तुम्हारा UPI QR कोड ऑटोमैटिक बन जाएगा -->
-                <img id="upi-qr" src="" alt="UPI QR Code">
-                <p style="font-size: 12px; font-weight: bold; color: #ef4444;">UPI ID: amanjinagal69@ibl</p>
-            </div>
-        </div>
-
-        <!-- लाइव डीलिंग चैट बॉक्स -->
-        <div class="card-title">💬 Live Deal Chat Support</div>
-        <div id="chat-section">
-            <div id="chat-box"></div>
-            <div id="input-area">
-                <input type="text" id="username" placeholder="नाम" value="Aman">
-                <input type="text" id="message-input" placeholder="पेमेंट के बाद यहाँ मैसेज करें..." autocomplete="off">
-                <button id="send-btn" onclick="sendMessage()">भेजें</button>
-            </div>
-        </div>
-
+<div class="container">
+    <h2>🤖 Aman AI: BG Remover</h2>
+    <p>सिर्फ एक क्लिक में अपनी फोटो का बैकग्राउंड गायब करें!</p>
+    
+    <!-- सुंदर अपलोड बॉक्स -->
+    <div class="upload-box" onclick="document.getElementById('imageInput').click()">
+        <span class="upload-label" id="uploadStatus">📸 यहाँ क्लिक करके फोटो चुनें</span>
+        <input type="file" id="imageInput" accept="image/*" onchange="updateFileName()">
     </div>
+    
+    <button onclick="removeBackground()">जादू देखें (Remove BG)</button>
+    
+    <div class="loading" id="loadingText">⏳ एआई अपना जादू कर रहा है, थोड़ा इंतज़ार करें भाई...</div>
+    
+    <!-- रिजल्ट और डाउनलोड बटन -->
+    <img id="preview" src="" alt="Edited Photo">
+    <button class="btn-download" id="downloadBtn" onclick="downloadImage()">⬇️ गैलरी में सेव करें</button>
+</div>
 
-    <script>
-        // पेमेंट QR जनरेट करने का फंक्शन
-        function showQR() {
-            let uID = "amanjinagal69@ibl"; // तुम्हारी UPI ID
-            let name = "Aman Store";
-            let qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(`upi://pay?pa=${uID}&pn=${name}&cu=INR`)}`;
-            document.getElementById("upi-qr").src = qrUrl;
-            
-            let qrBox = document.getElementById("qr-container");
-            if (qrBox.style.display === "block") {
-                qrBox.style.display = "none";
-            } else {
-                qrBox.style.display = "block";
-            }
-        }
+<script>
+let globalImageUrl = "";
 
-        // चैट बॉक्स का बैकएंड लॉजिक (गूगल शीट एपीआई)
-        const API_URL = "https://script.google.com/macros/s/AKfycbyLWkcCdZcYVjQuz-ml0rh_DmBBzj0vmIbLJ4j39tiq8lMceSHzikPX-AgXDi13Hlzt/exec";
-        let lastMsgCount = 0;
+// फोटो सेलेक्ट होने पर उसका नाम दिखाने के लिए
+function updateFileName() {
+    const fileInput = document.getElementById('imageInput');
+    const uploadStatus = document.getElementById('uploadStatus');
+    if(fileInput.files.length > 0) {
+        uploadStatus.innerText = "✅ " + fileInput.files[0].name;
+        uploadStatus.style.color = "#ffcc00";
+    }
+}
 
-        async function loadMessages() {
-            try {
-                let response = await fetch(API_URL);
-                let data = await response.json();
-                let chatBox = document.getElementById("chat-box");
-                let currentUser = document.getElementById("username").value;
-                
-                chatBox.innerHTML = "";
-                
-                data.forEach(msg => {
-                    let isMe = msg.sender.trim().toLowerCase() === currentUser.trim().toLowerCase();
-                    let msgClass = isMe ? "msg-right" : "msg-left";
-                    
-                    chatBox.innerHTML += `
-                        <div class="message-container ${msgClass}">
-                            <div class="sender-name">${isMe ? "आप" : msg.sender}</div>
-                            <div class="msg-text">${msg.message}</div>
-                        </div>
-                    `;
-                });
+async function removeBackground() {
+    const fileInput = document.getElementById('imageInput');
+    const preview = document.getElementById('preview');
+    const loadingText = document.getElementById('loadingText');
+    const downloadBtn = document.getElementById('downloadBtn');
+    
+    if (fileInput.files.length === 0) {
+        alert("भाई अमन, पहले कोई फोटो तो अपलोड कर लो!");
+        return;
+    }
 
-                if (data.length > lastMsgCount) {
-                    chatBox.scrollTop = chatBox.scrollHeight;
-                    lastMsgCount = data.length;
-                }
-            } catch (e) { console.error(e); }
-        }
+    const file = fileInput.files[0];
+    const formData = new FormData();
+    formData.append("image_file", file);
+    formData.append("size", "auto");
 
-        async function sendMessage() {
-            let sender = document.getElementById("username").value;
-            let message = document.getElementById("message-input").value;
-            let sendBtn = document.getElementById("send-btn");
-            if (!sender || !message) return;
-            sendBtn.disabled = true;
-            document.getElementById("message-input").value = "";
-            try {
-                await fetch(`${API_URL}?sender=${encodeURIComponent(sender)}&message=${encodeURIComponent(message)}`, { method: 'POST' });
-                loadMessages();
-            } catch (e) { console.error(e); } finally { sendBtn.disabled = false; }
-        }
+    loadingText.style.display = "block";
+    preview.style.style = "none";
+    downloadBtn.style.display = "none";
 
-        document.getElementById("message-input").addEventListener("keypress", function(e) {
-            if (e.key === "Enter") { sendMessage(); }
+    // तुम्हारी दी हुई API Key यहाँ डाल दी है
+    const apiKey = "ACRaE6rfpYnKpeL62fU3j2ER"; 
+
+    try {
+        const response = await fetch("https://api.remove.bg/v1.0/removebg", {
+            method: "POST",
+            headers: {
+                "X-Api-Key": apiKey
+            },
+            body: formData
         });
 
-        window.onload = () => {
-            loadMessages();
-            setInterval(loadMessages, 3000);
-        };
-    </script>
+        if (response.ok) {
+            const blob = await response.blob();
+            globalImageUrl = URL.createObjectURL(blob);
+            
+            // रिजल्ट स्क्रीन पर दिखाना
+            preview.src = globalImageUrl;
+            preview.style.display = "block";
+            downloadBtn.style.display = "block"; // डाउनलोड बटन ऑन
+        } else {
+            alert("कुछ गड़बड़ हो गई भाई! हो सकता है इस महीने की फ्री लिमिट पूरी हो गई हो या कोई और एरर हो।");
+        }
+    } catch (error) {
+        console.error("Error:", error);
+        alert("नेटवर्क में कोई दिक्कत आ रही है भाई, दोबारा ट्राई करो।");
+    } finally {
+        loadingText.style.display = "none";
+    }
+}
+
+// फोटो को सीधे फोन की गैलरी में डाउनलोड करने के लिए
+function downloadImage() {
+    if(globalImageUrl !== "") {
+        const a = document.createElement('a');
+        a.href = globalImageUrl;
+        a.download = "Aman_AI_Edited.png";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+    }
+}
+</script>
+
 </body>
 </html>
