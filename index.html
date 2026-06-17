@@ -1,3 +1,120 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aman AI - Free BG Remover</title>
+    <script src="https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.5.5/dist/bundle.js"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #121212;
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+            margin: 0;
+        }
+        .container {
+            max-width: 500px;
+            margin: 40px auto;
+            background: #1e1e1e;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 25px rgba(0, 0, 0, 0.7);
+            border: 1px solid #00ffcc;
+        }
+        h2 { 
+            color: #00ffcc; 
+            font-size: 24px;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        p {
+            color: #aaa;
+            font-size: 14px;
+            margin-bottom: 25px;
+        }
+        .upload-box {
+            border: 2px dashed #00ffcc;
+            padding: 20px;
+            border-radius: 10px;
+            background: #252525;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+        input[type="file"] { 
+            display: none; 
+        }
+        .upload-label {
+            color: #00ffcc;
+            cursor: pointer;
+            font-weight: bold;
+            display: block;
+        }
+        button {
+            background: #00ffcc;
+            color: #121212;
+            border: none;
+            padding: 14px 25px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 25px;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 255, 204, 0.3);
+        }
+        button:hover { 
+            background: #00ccaa; 
+            transform: translateY(-2px);
+        }
+        #preview {
+            max-width: 100%;
+            margin-top: 25px;
+            border-radius: 10px;
+            display: none;
+            border: 2px solid #333;
+        }
+        .loading {
+            display: none;
+            color: #ffcc00;
+            margin-top: 20px;
+            font-weight: bold;
+            font-size: 15px;
+        }
+        .btn-download {
+            background: #ff0055;
+            color: white;
+            margin-top: 15px;
+            display: none;
+            box-shadow: 0 4px 10px rgba(255, 0, 85, 0.3);
+        }
+        .btn-download:hover {
+            background: #d00045;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>🤖 Aman AI: Free BG Remover</h2>
+    <p>बिना किसी लिमिट के, 100% फ्री में बैकग्राउंड गायब करें!</p>
+    
+    <div class="upload-box" onclick="document.getElementById('imageInput').click()">
+        <span class="upload-label" id="uploadStatus">📸 यहाँ क्लिक करके फोटो चुनें</span>
+        <input type="file" id="imageInput" accept="image/*" onchange="updateFileName()">
+    </div>
+    
+    <button onclick="removeBackground()">जादू देखें (Remove BG)</button>
+    
+    <div class="loading" id="loadingText">⏳ पहली बार में AI मॉडल लोड होने में 10-15 सेकंड लग सकते हैं, रुकें भाई...</div>
+    
+    <img id="preview" src="" alt="Edited Photo">
+    <button class="btn-download" id="downloadBtn" onclick="downloadImage()">⬇️ गैलरी में सेव करें</button>
+</div>
+
+<script>
 let globalImageUrl = "";
 
 function updateFileName() {
@@ -21,47 +138,21 @@ async function removeBackground() {
     }
 
     const file = fileInput.files[0];
-    const formData = new FormData();
-    formData.append("image_file", file);
-    formData.append("size", "auto");
-
     loadingText.style.display = "block";
     preview.style.display = "none";
     downloadBtn.style.display = "none";
 
-    const apiKey = "ACRaE6rfpYnKpeL62fU3j2ER"; 
-
     try {
-        const response = await fetch("https://api.remove.bg/v1.0/removebg", {
-            method: "POST",
-            headers: {
-                "X-Api-Key": apiKey
-            },
-            body: formData
-        });
-
-        if (response.ok) {
-            const blob = await response.blob();
-            globalImageUrl = URL.createObjectURL(blob);
-            preview.src = globalImageUrl;
-            preview.style.display = "block";
-            downloadBtn.style.display = "block";
-        } else {
-            // यहाँ असली एरर कोड देखने के लिए स्टेटस चेक करेंगे
-            const errorText = await response.text();
-            console.log("API Error Status:", response.status, errorText);
-            
-            if(response.status === 403) {
-                alert("भाई, API Key गलत है या एक्टिव नहीं हुई है। एक बार remove.bg पर जाकर नई की (Key) चेक करो।");
-            } else if(response.status === 402) {
-                alert("इस फ्री API Key के मुफ्त फोटो क्रेडिट्स खत्म हो गए हैं भाई!");
-            } else {
-                alert("सर्वर से कनेक्ट नहीं हो पाया। कोड को अपडेट करने के लिए एक बार पेज को रिफ्रेश (Refresh) करके दोबारा ट्राई करो।");
-            }
-        }
+        // यह कमांड बिना किसी API Key के सीधे ब्राउज़र में एआई प्रोसेस चालू करती है
+        const blob = await imglyRemoveBackground(file);
+        
+        globalImageUrl = URL.createObjectURL(blob);
+        preview.src = globalImageUrl;
+        preview.style.display = "block";
+        downloadBtn.style.display = "block";
     } catch (error) {
-        console.error("Fetch Error:", error);
-        alert("इंटरनेट या सिक्योरिटी (CORS) की दिक्कत है भाई।");
+        console.error("Error:", error);
+        alert("फोटो प्रोसेस करने में दिक्कत हुई भाई। कोई दूसरी फोटो ट्राई करो।");
     } finally {
         loadingText.style.display = "none";
     }
@@ -71,9 +162,13 @@ function downloadImage() {
     if(globalImageUrl !== "") {
         const a = document.createElement('a');
         a.href = globalImageUrl;
-        a.download = "Aman_AI_Edited.png";
+        a.download = "Aman_AI_NoBG.png";
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
     }
 }
+</script>
+
+</body>
+</html>
