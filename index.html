@@ -1,124 +1,5 @@
-<!DOCTYPE html>
-<html lang="hi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aman AI - One Click Magic</title>
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background: #121212;
-            color: #fff;
-            text-align: center;
-            padding: 20px;
-            margin: 0;
-        }
-        .container {
-            max-width: 500px;
-            margin: 40px auto;
-            background: #1e1e1e;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 4px 25px rgba(0, 0, 0, 0.7);
-            border: 1px solid #00ffcc;
-        }
-        h2 { 
-            color: #00ffcc; 
-            font-size: 24px;
-            margin-bottom: 5px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        p {
-            color: #aaa;
-            font-size: 14px;
-            margin-bottom: 25px;
-        }
-        .upload-box {
-            border: 2px dashed #00ffcc;
-            padding: 20px;
-            border-radius: 10px;
-            background: #252525;
-            cursor: pointer;
-            margin-bottom: 20px;
-        }
-        input[type="file"] { 
-            display: none; 
-        }
-        .upload-label {
-            color: #00ffcc;
-            cursor: pointer;
-            font-weight: bold;
-            display: block;
-        }
-        button {
-            background: #00ffcc;
-            color: #121212;
-            border: none;
-            padding: 14px 25px;
-            font-size: 16px;
-            font-weight: bold;
-            border-radius: 25px;
-            cursor: pointer;
-            width: 100%;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 10px rgba(0, 255, 204, 0.3);
-        }
-        button:hover { 
-            background: #00ccaa; 
-            transform: translateY(-2px);
-        }
-        #preview {
-            max-width: 100%;
-            margin-top: 25px;
-            border-radius: 10px;
-            display: none;
-            border: 2px solid #333;
-        }
-        .loading {
-            display: none;
-            color: #ffcc00;
-            margin-top: 20px;
-            font-weight: bold;
-            font-size: 15px;
-        }
-        .btn-download {
-            background: #ff0055;
-            color: white;
-            margin-top: 15px;
-            display: none;
-            box-shadow: 0 4px 10px rgba(255, 0, 85, 0.3);
-        }
-        .btn-download:hover {
-            background: #d00045;
-        }
-    </style>
-</head>
-<body>
-
-<div class="container">
-    <h2>🤖 Aman AI: BG Remover</h2>
-    <p>सिर्फ एक क्लिक में अपनी फोटो का बैकग्राउंड गायब करें!</p>
-    
-    <!-- सुंदर अपलोड बॉक्स -->
-    <div class="upload-box" onclick="document.getElementById('imageInput').click()">
-        <span class="upload-label" id="uploadStatus">📸 यहाँ क्लिक करके फोटो चुनें</span>
-        <input type="file" id="imageInput" accept="image/*" onchange="updateFileName()">
-    </div>
-    
-    <button onclick="removeBackground()">जादू देखें (Remove BG)</button>
-    
-    <div class="loading" id="loadingText">⏳ एआई अपना जादू कर रहा है, थोड़ा इंतज़ार करें भाई...</div>
-    
-    <!-- रिजल्ट और डाउनलोड बटन -->
-    <img id="preview" src="" alt="Edited Photo">
-    <button class="btn-download" id="downloadBtn" onclick="downloadImage()">⬇️ गैलरी में सेव करें</button>
-</div>
-
-<script>
 let globalImageUrl = "";
 
-// फोटो सेलेक्ट होने पर उसका नाम दिखाने के लिए
 function updateFileName() {
     const fileInput = document.getElementById('imageInput');
     const uploadStatus = document.getElementById('uploadStatus');
@@ -145,10 +26,9 @@ async function removeBackground() {
     formData.append("size", "auto");
 
     loadingText.style.display = "block";
-    preview.style.style = "none";
+    preview.style.display = "none";
     downloadBtn.style.display = "none";
 
-    // तुम्हारी दी हुई API Key यहाँ डाल दी है
     const apiKey = "ACRaE6rfpYnKpeL62fU3j2ER"; 
 
     try {
@@ -163,23 +43,30 @@ async function removeBackground() {
         if (response.ok) {
             const blob = await response.blob();
             globalImageUrl = URL.createObjectURL(blob);
-            
-            // रिजल्ट स्क्रीन पर दिखाना
             preview.src = globalImageUrl;
             preview.style.display = "block";
-            downloadBtn.style.display = "block"; // डाउनलोड बटन ऑन
+            downloadBtn.style.display = "block";
         } else {
-            alert("कुछ गड़बड़ हो गई भाई! हो सकता है इस महीने की फ्री लिमिट पूरी हो गई हो या कोई और एरर हो।");
+            // यहाँ असली एरर कोड देखने के लिए स्टेटस चेक करेंगे
+            const errorText = await response.text();
+            console.log("API Error Status:", response.status, errorText);
+            
+            if(response.status === 403) {
+                alert("भाई, API Key गलत है या एक्टिव नहीं हुई है। एक बार remove.bg पर जाकर नई की (Key) चेक करो।");
+            } else if(response.status === 402) {
+                alert("इस फ्री API Key के मुफ्त फोटो क्रेडिट्स खत्म हो गए हैं भाई!");
+            } else {
+                alert("सर्वर से कनेक्ट नहीं हो पाया। कोड को अपडेट करने के लिए एक बार पेज को रिफ्रेश (Refresh) करके दोबारा ट्राई करो।");
+            }
         }
     } catch (error) {
-        console.error("Error:", error);
-        alert("नेटवर्क में कोई दिक्कत आ रही है भाई, दोबारा ट्राई करो।");
+        console.error("Fetch Error:", error);
+        alert("इंटरनेट या सिक्योरिटी (CORS) की दिक्कत है भाई।");
     } finally {
         loadingText.style.display = "none";
     }
 }
 
-// फोटो को सीधे फोन की गैलरी में डाउनलोड करने के लिए
 function downloadImage() {
     if(globalImageUrl !== "") {
         const a = document.createElement('a');
@@ -190,7 +77,3 @@ function downloadImage() {
         document.body.removeChild(a);
     }
 }
-</script>
-
-</body>
-</html>
